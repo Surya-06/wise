@@ -19,5 +19,4 @@ public class folder_values implements Serializable {
         subject_name="";
         data = new ArrayList<>();
     }
-
 };

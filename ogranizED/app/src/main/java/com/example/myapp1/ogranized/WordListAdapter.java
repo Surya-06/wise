@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -40,13 +41,16 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     public void onBindViewHolder(WordListAdapter.WordViewHolder holder, int position) {
         final folder_values folder = received_folders.get(position);
         holder.word.setText(folder.subject_name);
+        //Toast.makeText(current_context, (CharSequence) folder.data,Toast.LENGTH_LONG).show();
+
         holder.word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(current_context, "please work", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(current_context, "please work", Toast.LENGTH_SHORT).show();
                 // call to generic activity for subject update
                 Intent open_folder= new Intent(current_context,generic_activity.class);
-                open_folder.putExtra("folder" , (Serializable)folder);
+                //Toast.makeText(current_context, "trying to start", Toast.LENGTH_SHORT).show();
+                open_folder.putExtra("folder" , folder);
                 current_context.startActivity(open_folder);
             }
         });

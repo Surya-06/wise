@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background"
+    tools:context="com.example.myapp1.ogranized.receiver_activity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:text="Select book"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="@color/colorPrimary"/>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/folder_spinner"
+
+        />
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:id="@+id/submit_button"
+        android:text="Submit"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="20pt"/>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="center"
+        android:id="@+id/ivv"
+        android:src="@mipmap/ic_launcher"
+        />
+</LinearLayout>
+
+
+
