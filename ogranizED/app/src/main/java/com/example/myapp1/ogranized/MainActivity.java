@@ -9,6 +9,7 @@ import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -63,20 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        //defining auto complete textview
-       /* act=findViewById(R.id.autocomplete);
-        ArrayList subj=new ArrayList();
-        subj.add("AI");
-        subj.add("AAAI");
-        subj.add("DWDM");
-        subj.add("sddddd");
-        ArrayAdapter sub=new ArrayAdapter(this,android.R.layout.simple_list_item_1,subj);
-        act.setAdapter(sub);
-        */
-        if ( retrieveArray() ){
-           // Toast.makeText(this, "retreival successful", Toast.LENGTH_SHORT).show();
-        }
+        if ( retrieveArray() ) {} // no activity since only restoration of data is done
 
         mRequestFileIntent = new Intent(Intent.ACTION_PICK);
         mRequestFileIntent.setType("image/jpg");
@@ -96,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //To get the position of the item that is clicked
         mAdapter = new WordListAdapter(this, main_contents);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this , 2));
         mRecyclerView.setAdapter(mAdapter);
         final Intent mRequestFileIntent = new Intent(Intent.ACTION_PICK);
          mRequestFileIntent.setType("image/jpg");
