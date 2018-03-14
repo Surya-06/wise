@@ -1,6 +1,7 @@
 package com.example.myapp1.ogranized;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -73,11 +74,24 @@ public class adapter_files extends RecyclerView.Adapter<adapter_files.files_view
         holder.show_file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 Toast.makeText(current_context,  " clicked the file to open , does not work though", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent (Intent.ACTION_GET_CONTENT);
                 Uri uri_creater = Uri.parse ( current_file.getAbsolutePath() );
                 intent.setDataAndType(uri_creater,"application/pdf");
-                current_context.startActivity(intent);
+                current_context.startActivity(intent); */
+
+                File new_file = current_file ;
+                Uri path = Uri.fromFile(new_file);
+                Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
+                pdfOpenintent.setDataAndType(path, "application/*");
+                pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                try {
+                    current_context.startActivity(pdfOpenintent);
+                }
+                catch (ActivityNotFoundException e) {
+                    Toast.makeText(current_context, "Error occured while starting the activity to open the file.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         Toast.makeText(current_context, Integer.toString(position), Toast.LENGTH_SHORT).show();

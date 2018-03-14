@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.OpenableColumns;
@@ -16,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -23,6 +25,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -36,7 +39,18 @@ public class receiver_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receiver_activity);
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder(); StrictMode.setVmPolicy(builder.build());
+
+        // disable some strict exceptions
+        if(Build.VERSION.SDK_INT>=24){
+            try{
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        // StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder(); StrictMode.setVmPolicy(builder.build());
         Toast.makeText(this, "loading the contents saved earlier", Toast.LENGTH_SHORT).show();
         if ( onload() ){
             Toast.makeText(this, "SUCCESS", Toast.LENGTH_SHORT).show();
@@ -45,6 +59,7 @@ public class receiver_activity extends AppCompatActivity {
             Toast.makeText(this, "FAIL", Toast.LENGTH_SHORT).show();
         folder_spinner = (Spinner) findViewById(R.id.folder_spinner);
         ArrayList<String> content_names = new ArrayList<String>();
+        if ( main_contents == null )    { main_contents = new ArrayList<>(); }
         for ( folder_values i : main_contents ) {
             content_names.add(i.subject_name);
         }
@@ -68,7 +83,7 @@ public class receiver_activity extends AppCompatActivity {
                 if ( find == -1 )
                     Toast.makeText(receiver_activity.this, "empty , no folder found ", Toast.LENGTH_SHORT).show();
 
-
+                /*
                 Toast.makeText(receiver_activity.this, "the type of the field is "+getIntent().getType(), Toast.LENGTH_SHORT).show();
                 Uri receivedUri = (Uri)getIntent().getParcelableExtra( Intent.EXTRA_STREAM );
                 Toast.makeText(receiver_activity.this, "the data given is "+getIntent().getData(), Toast.LENGTH_SHORT).show();
@@ -79,29 +94,34 @@ public class receiver_activity extends AppCompatActivity {
                     File new_file = new File ( receivedUri.getPath() );
                     Toast.makeText(receiver_activity.this, "Done updating  new files", Toast.LENGTH_SHORT).show();
 
-                    // try opening the current file
-                    Intent temp_intent = new Intent ( Intent.ACTION_VIEW );
-                    temp_intent.setData(Uri.fromFile(new_file));
-                    temp_intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(temp_intent);
-                    /*
                     main_contents.get(find).data.add(new_file);
                     Toast.makeText(receiver_activity.this, "updated length is "+main_contents.get(find).data.size(), Toast.LENGTH_SHORT).show();
                     saveArray();
-                    */
+
                 }
+                */
+
+                Intent intent=getIntent();
+                if(intent!=null) {
+                    String action=intent.getAction();
+                    String type=intent.getType();
+                    if(Intent.ACTION_SEND.equals(action) ) {
+                        Uri uri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                        String filepath = uri.getPath();
+                        File new_file = new File(filepath);
+                        main_contents.get(find).data.add(new_file);
+                        Toast.makeText(receiver_activity.this, "Save array", Toast.LENGTH_SHORT).show();
+                        saveArray();
+                        // TextView temp_text = (TextView) findViewById(R.id.tester_text);
+                       // temp_text.setText(filepath);
+                    }
+                }
+
                 finish();
             }
         });
     }
     public boolean onload  ( ) {
-        /*SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences( this );
-        Toast.makeText(this, "found the default shared prefs", Toast.LENGTH_SHORT).show();
-        Gson gson=new Gson();
-        String json= sp.getString("main_contents", "");
-        //folder_values mc = gson.fromJson(json, (Type) main_contents.getClass());
-        this.main_contents = gson.fromJson(json, (Type) main_contents.getClass() );
-        return true;*/
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String json = sp.getString("store_contents","");

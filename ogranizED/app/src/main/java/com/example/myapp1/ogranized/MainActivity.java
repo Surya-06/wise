@@ -55,9 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
+        // this does not work as intended
         finish();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

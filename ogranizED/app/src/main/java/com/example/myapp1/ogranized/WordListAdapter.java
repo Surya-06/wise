@@ -46,10 +46,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         holder.word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(current_context, "please work", Toast.LENGTH_SHORT).show();
-                // call to generic activity for subject update
                 Intent open_folder= new Intent(current_context,generic_activity.class);
-                //Toast.makeText(current_context, "trying to start", Toast.LENGTH_SHORT).show();
                 open_folder.putExtra("folder" , folder);
                 current_context.startActivity(open_folder);
             }

@@ -15,31 +15,24 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Main2Activity" />
         <activity android:name=".generic_activity" />
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.myapp.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-
-
         <activity android:name=".receiver_activity">
             <intent-filter>
-                <action android:name="android.intent.action.SEND"  />
-                <category android:name="android.intent.category.DEFAULT"  />
-                <data android:mimeType="image/*"  />
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType= "application/*" />
+                <data android:host="*" />
             </intent-filter>
         </activity>
+
+
     </application>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
