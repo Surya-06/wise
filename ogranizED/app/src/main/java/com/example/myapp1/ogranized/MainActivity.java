@@ -1,6 +1,8 @@
 package com.example.myapp1.ogranized;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -55,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        // this does not work as intended
+        saveArray();
         finish();
+        super.onBackPressed();
     }
 
     @Override
@@ -68,14 +70,12 @@ public class MainActivity extends AppCompatActivity {
 
         if ( retrieveArray() ) {} // no activity since only restoration of data is done
 
-        mRequestFileIntent = new Intent(Intent.ACTION_PICK);
-        mRequestFileIntent.setType("image/jpg");
-
         Intent received_intent = getIntent();
         if (received_intent != null) {
             Bundle received_values = received_intent.getBundleExtra("updated_intent");
             if (received_values != null) {
                 main_contents = (ArrayList<folder_values>) received_values.get("updated_folders");
+                saveArray();
             }
             else{}
         }
@@ -97,32 +97,11 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("bundled_values", send_content);
                 startActivity(intent);
             }
-    protected void requestFile()
-            {
-            startActivityForResult(mRequestFileIntent,0);}
-            public void onActivityResult(int requestCode, int resultCode, Intent returnIntent)
-            {
-                if(resultCode!= RESULT_OK) {
-                    return;
-                }
-                else {
-                    Uri returnUri = returnIntent.getData();
-                    try {
-                        mInputPDF = getContentResolver().openFileDescriptor(returnUri, "r");
-                    }
-                    catch(FileNotFoundException e)
-                    {
-                        e.printStackTrace();
-                        Log.e("MainActivity","File Not Found");
-                        return;
 
-                    }
-                    FileDescriptor fd=mInputPDF.getFileDescriptor();
 
-                }
-            }
         });
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -145,15 +124,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public boolean saveArray() {
+        Log.v("logged" , "saving the files finally ");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         SharedPreferences.Editor edit = sp.edit();
         Gson gson = new Gson();
         String json = gson.toJson ( new wrapper ( main_contents ) );
         edit.putString("store_contents",json);
+        Log.v ( "logged" , " saved them trying to get contents " + json.length() );
         edit.commit();
         return true;
     }
     public boolean retrieveArray () {
+        Log.v ( "logged" , " values retreived from the array");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String json = sp.getString("store_contents","");
         Gson gson = new Gson();
@@ -161,6 +143,11 @@ public class MainActivity extends AppCompatActivity {
         if ( temp!=null )
         main_contents = temp.temp_values;
         else{}
+        if ( main_contents != null )
+            Log.v( "logged","values done importing "+main_contents.size());
+        else
+            Log.v ( "logged" , "values imported with null in main contents ");
+
         return true;
     }
 }
