@@ -49,7 +49,7 @@ public class adapter_files extends RecyclerView.Adapter<adapter_files.files_view
         //holder.show_file.setText(current_file.getName());
         String path=current_file.getAbsolutePath();
         File imgfile=new File(path);
-        holder.show_file.setText(path);
+        holder.show_file.setText(current_file.getName());
         holder.options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,13 +74,6 @@ public class adapter_files extends RecyclerView.Adapter<adapter_files.files_view
         holder.show_file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Toast.makeText(current_context,  " clicked the file to open , does not work though", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent (Intent.ACTION_GET_CONTENT);
-                Uri uri_creater = Uri.parse ( current_file.getAbsolutePath() );
-                intent.setDataAndType(uri_creater,"application/pdf");
-                current_context.startActivity(intent); */
-
                 File new_file = current_file ;
                 Uri path = Uri.fromFile(new_file);
                 Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
