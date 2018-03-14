@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.support.v7.widget.AlertDialogLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 /**
@@ -74,6 +77,16 @@ public class adapter_files extends RecyclerView.Adapter<adapter_files.files_view
         holder.show_file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(Build.VERSION.SDK_INT>=24){
+                    try{
+                        Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                        m.invoke(null);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
                 File new_file = current_file ;
                 Uri path = Uri.fromFile(new_file);
                 Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);

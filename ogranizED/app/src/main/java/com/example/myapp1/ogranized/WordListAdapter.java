@@ -26,7 +26,6 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     private ArrayList<folder_values> received_folders;
 
     public WordListAdapter(Context context, ArrayList<folder_values> folder_list ) {
-        //Toast.makeText(context, "inside contructor", Toast.LENGTH_SHORT).show();
         mInflater = LayoutInflater.from(context);
         this.current_context = context;
         this.received_folders = folder_list;
@@ -65,9 +64,8 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
             Button word;
 
             public WordViewHolder ( View itemView ) {
-            super(itemView);
-            this.word = (Button) itemView.findViewById(R.id.content_open);
-        }
-
+                super(itemView);
+                this.word = (Button) itemView.findViewById(R.id.content_open);
+            }
     }
 }

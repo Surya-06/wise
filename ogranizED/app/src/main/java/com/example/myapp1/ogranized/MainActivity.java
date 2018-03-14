@@ -76,15 +76,11 @@ public class MainActivity extends AppCompatActivity {
             Bundle received_values = received_intent.getBundleExtra("updated_intent");
             if (received_values != null) {
                 main_contents = (ArrayList<folder_values>) received_values.get("updated_folders");
-            //    Toast.makeText(this, "the size of the resent values folder is "+main_contents.size(), Toast.LENGTH_SHORT).show();
             }
             else{}
-              //  Toast.makeText(this, "bundle is null , so you are done", Toast.LENGTH_SHORT).show();
         }
 
         this.mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
-
-                //To get the position of the item that is clicked
         mAdapter = new WordListAdapter(this, main_contents);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this , 2));
         mRecyclerView.setAdapter(mAdapter);
@@ -96,23 +92,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                //intent.putStringArrayListExtra("folder_names",mWordList);
-
                 Bundle send_content = new Bundle();
                 send_content.putSerializable("folder_names", main_contents);
                 intent.putExtra("bundled_values", send_content);
-
                 startActivity(intent);
             }
-
-
-            protected void requestFile()
+    protected void requestFile()
             {
-                /*user requests file, send an intent to server app */
             startActivityForResult(mRequestFileIntent,0);}
-
             public void onActivityResult(int requestCode, int resultCode, Intent returnIntent)
-
             {
                 if(resultCode!= RESULT_OK) {
                     return;
@@ -133,22 +121,17 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
-
         });
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // Toast.makeText(this, "saving the values in the array", Toast.LENGTH_SHORT).show();
         if ( saveArray() )
             Toast.makeText(this, "save successful", Toast.LENGTH_SHORT).show();
         return;
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -156,45 +139,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
-
     public boolean saveArray() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         SharedPreferences.Editor edit = sp.edit();
         Gson gson = new Gson();
         String json = gson.toJson ( new wrapper ( main_contents ) );
-      //  Toast.makeText(this, "storing contents "+json, Toast.LENGTH_SHORT).show();
         edit.putString("store_contents",json);
         edit.commit();
         return true;
     }
-
     public boolean retrieveArray () {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String json = sp.getString("store_contents","");
         Gson gson = new Gson();
-      //  Toast.makeText(this, "the contents of the json file are "+json, Toast.LENGTH_SHORT).show();
         wrapper temp = gson.fromJson(json , wrapper.class );
         if ( temp!=null )
         main_contents = temp.temp_values;
         else{}
-          //  Toast.makeText(this, "temp is empty , no data stored earlier", Toast.LENGTH_SHORT).show();
         return true;
     }
-
-
-
 }
-
-
 class wrapper {
     public ArrayList<folder_values> temp_values;
     public wrapper (ArrayList<folder_values> temp_values) {
